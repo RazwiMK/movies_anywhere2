@@ -153,7 +153,7 @@ class ProfileApp extends StatelessWidget {
                     height: 10.0,
                   ),
                   Text(
-                    'My name is Alice and I am  a freelance mobile app developper.\n'
+                    'My name is Anna and I am  a freelance mobile app developper.\n'
                     'if you need any mobile app for your company then contact me for more informations',
                     style: TextStyle(
                       fontSize: 22.0,
