@@ -24,7 +24,7 @@ class _RootAppState extends State<RootApp> {
   Widget getBody() {
     return IndexedStack(
       index: activeTab,
-      children: [HomePage(), SearchPage(), ProfileApp()],
+      children: [HomePage(), SearchPage(), ProfilePage()],
     );
   }
 

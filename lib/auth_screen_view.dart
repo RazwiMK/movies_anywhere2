@@ -15,6 +15,7 @@ class _AuthScreenViewState extends State<AuthScreenView> {
 
   @override
   void initState() {
+    // ignore: todo
     // TODO: implement initState
     super.initState();
     pageController = PageController();
@@ -22,6 +23,7 @@ class _AuthScreenViewState extends State<AuthScreenView> {
 
   @override
   void dispose() {
+    // ignore: todo
     // TODO: implement dispose
     super.dispose();
     pageController.dispose();
@@ -59,11 +61,13 @@ class _AuthScreenViewState extends State<AuthScreenView> {
         activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(
+              // ignore: deprecated_member_use
               title: Text("Log-In"),
               icon: Icon(
                 FontAwesomeIcons.signInAlt,
               )),
           BottomNavigationBarItem(
+              // ignore: deprecated_member_use
               title: Text("Register"),
               icon: Icon(
                 FontAwesomeIcons.userPlus,

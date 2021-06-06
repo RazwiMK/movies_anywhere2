@@ -4,7 +4,7 @@ import 'package:movies_anywhere/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(HomePage());
+    await tester.pumpWidget(RootApp());
 
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);

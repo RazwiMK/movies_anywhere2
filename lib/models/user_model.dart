@@ -22,7 +22,7 @@ class UserModel {
 
   UserModel.fromMap(Map<String, dynamic> mapData) {
     this.uid = mapData["uid"];
-    this.username = mapData[username];
+    this.username = mapData["username"];
     this.email = mapData["email"];
   }
 }

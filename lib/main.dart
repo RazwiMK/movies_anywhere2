@@ -1,103 +1,122 @@
-import 'dart:ui';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_anywhere/login.dart';
-import 'package:movies_anywhere/signup.dart';
+import 'package:movies_anywhere/home_page.dart';
+import 'package:movies_anywhere/services/authentication_service.dart';
+import 'package:movies_anywhere/auth_screen_view.dart';
+import 'package:movies_anywhere/json/root_app_json.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:movies_anywhere/profile_page.dart';
+import 'package:movies_anywhere/search_page.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomePage(),
+    home: MyApp(),
   ));
 }
 
-class HomePage extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+            create: (context) =>
+                context.read<AuthenticationService>().authStateChanges),
+      ],
+      child: MaterialApp(
+        home: AuthenticationWrapper(),
+      ),
+    );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User>();
+
+    if (firebaseUser != null) {
+      //If the user is successfully Logged-In.
+      return RootApp();
+    } else {
+      //If the user is not Logged-In.
+      return AuthScreenView();
+    }
+  }
+}
+
+//import 'package:movies_anywhere/json/root_app_json.dart';
+//import 'package:movies_anywhere/search_page.dart';
+class RootApp extends StatefulWidget {
+  @override
+  _RootAppState createState() => _RootAppState();
+}
+
+class _RootAppState extends State<RootApp> {
+  int activeTab = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    "Welcome",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                    ),
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: getFooter(),
+      body: getBody(),
+    );
+  }
+
+  Widget getBody() {
+    return IndexedStack(
+      index: activeTab,
+      children: [HomePage(), SearchPage(), ProfilePage()],
+    );
+  }
+
+  Widget getFooter() {
+    return Container(
+      height: 80,
+      decoration: BoxDecoration(color: Colors.black),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(items.length, (index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  activeTab = index;
+                });
+              },
+              child: Column(
+                children: [
+                  Icon(
+                    items[index]['icon'],
+                    color: activeTab == index
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.5),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
                   Text(
-                    "Welcome to Movies Anywhere!! ",
-                    textAlign: TextAlign.center,
+                    items[index]['text'],
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+                        fontSize: 10,
+                        color: activeTab == index
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.5)),
                   )
                 ],
               ),
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/welcome.png"))),
-              ),
-              Column(
-                children: <Widget>[
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    height: 60,
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    color: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Text(
-                      "Login",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    height: 60,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignupPage()));
-                    },
-                    color: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Text(
-                      "Sign up",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+            );
+          }),
         ),
       ),
     );
