@@ -36,11 +36,12 @@ class _SearchPage extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey,
         title: new TextField(
             controller: _inputController,
             focusNode: _inputFocus,
@@ -51,7 +52,7 @@ class _SearchPage extends State<SearchPage> {
             ),
             style: TextStyle(
               fontSize: 20.0,
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.w500,
             ),
             onSubmitted: (String term) {
@@ -95,7 +96,10 @@ class _SearchPage extends State<SearchPage> {
       return new Container();
     else if (_movieData.isEmpty)
       return new Center(
-        child: Text('No results'),
+        child: Text(
+          'No results',
+          style: TextStyle(color: Colors.white),
+        ),
       );
     List items = ['results'];
 
@@ -117,6 +121,7 @@ class _SearchPage extends State<SearchPage> {
     var MovieImage = item['backdrop_path'];
     return Card(
         child: ListTile(
+            tileColor: Colors.grey,
             title: Row(
               children: <Widget>[
                 Container(
@@ -134,7 +139,7 @@ class _SearchPage extends State<SearchPage> {
                   width: 200,
                   child: Text(
                     MovieName.toString(),
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 )
               ],
@@ -159,13 +164,17 @@ class _SearchPage extends State<SearchPage> {
   Widget _createBody() {
     if (_searchTerm == "")
       return Center(
-        child: Text('Search movies'),
+        child: Text(
+          'Search movies',
+          style: TextStyle(color: Colors.white),
+        ),
       );
 
     if (_noResults)
       return Center(
           child: Text(
         'No movies found',
+        style: TextStyle(color: Colors.white),
       ));
 
     if (_movieData != null && _movieData.isNotEmpty)

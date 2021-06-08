@@ -47,6 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text("ProfilePage"),
         centerTitle: false,
@@ -54,52 +55,67 @@ class _ProfilePageState extends State<ProfilePage> {
       body: _currentUser == null
           ? Center(child: CircularProgressIndicator())
           : Column(children: [
-              SizedBox(height: 10.0),
-              Text(
-                "$_username",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                "uid: $_uid",
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                "email: $_email",
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'),
-              ),
-              Center(
-                // ignore: deprecated_member_use
-                child: RaisedButton(
-                  child: Text(
-                    "Logout",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+              Column(children: [
+                Container(
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    child: Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                    ),
+                    elevation: 8.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    color: Colors.red,
+                    onPressed: () {
+                      context.read<AuthenticationService>().signOut();
+                    },
                   ),
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  color: Colors.orange,
-                  onPressed: () {
-                    context.read<AuthenticationService>().signOut();
-                  },
                 ),
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage("https://picsum.photos/200/300"),
+                      radius: 100.0,
+                    ),
+                  ),
+                ),
+                Text(
+                  "$_username",
+                  style: TextStyle(
+                      fontSize: 25.0,
+                      color: Colors.white,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "$_email",
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.white,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w300),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ]),
+              SizedBox(
+                height: 10,
               ),
               Center(
                 child: Text(
                   "WatchList",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
+                      color: Colors.white,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat'),
                 ),
@@ -125,6 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             itemBuilder: (context, index) {
                               return Card(
                                 child: ListTile(
+                                  tileColor: Colors.grey,
                                   title: Row(
                                     children: <Widget>[
                                       Container(
@@ -142,7 +159,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         width: 200,
                                         child: Text(
                                           doc[index].data()['name'],
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
                                         ),
                                       )
                                     ],
